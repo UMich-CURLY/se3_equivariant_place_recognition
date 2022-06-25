@@ -1,11 +1,11 @@
 # EPN-NetVLAD Docker
-This folder contains instructions on creating a docker image that includes Pytorch and other libraries needed for EPN-NetVLAD.
+This folder contains instructions on creating a docker image that includes PyTorch and other libraries needed for EPN-NetVLAD.
 
 ## How to build
 
 build image
 ```
-docker build --tag umcurly/nvidia_pytorch_21_12 .
+docker build --tag epnnetvlad/epnnetvlad_docker .
 ```
 change folder direction in line 15, then build container
 ```
