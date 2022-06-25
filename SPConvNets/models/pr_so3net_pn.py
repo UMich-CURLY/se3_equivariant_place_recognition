@@ -1,5 +1,6 @@
 """
-network architechture for place recognition (Oxford dataset)
+EPN network architechture for place recognition (Oxford dataset)
+Adapted from https://github.com/nintendops/EPN_PointCloud/blob/main/SPConvNets/models/inv_so3net_pn.py
 """
 
 import math

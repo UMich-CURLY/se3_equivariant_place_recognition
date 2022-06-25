@@ -1,3 +1,7 @@
+"""
+File taken from https://github.com/nintendops/EPN_PointCloud/blob/main/SPConvNets/models/reg_so3net.py
+"""
+
 import math
 import os
 import numpy as np

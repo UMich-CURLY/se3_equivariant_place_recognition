@@ -1,4 +1,5 @@
 """
+Main file for training EPN-NetVLAD on Oxford benchmark
 Adapted from https://github.com/cattaneod/PointNetVlad-Pytorch/blob/master/train_pointnetvlad.py
 """
 import numpy as np
