@@ -849,13 +849,13 @@ class FinalLinear(nn.Module):
         # x.feats = (bs, c_in, np, na)
         if x.feats.shape[-1] > 1:
             # feat = torch.sum(x.feats, -1, keepdim=True)
-            # feat, _ = torch.max(x.feats, -1, keepdim=True)
-            feat = torch.mean(x.feats, -1, keepdim=True)
+            feat, _ = torch.max(x.feats, -1, keepdim=True)
+            # feat = torch.mean(x.feats, -1, keepdim=True)
         feat = feat.squeeze(-1).permute(0, 2, 1)
 
         x_out = self.head_mlp(feat) # bs, N, c_out
 
-        return x_out, None
+        return x_out
 
 class FinalConv(nn.Module):
     def __init__(self, params, norm=None):

@@ -40,9 +40,12 @@ class PRSO3ConvModel(nn.Module):
 
         for block_i, block in enumerate(self.backbone):
             x = block(x)
-        
+
+        x_equivariant = x.feats.clone().detach().squeeze(0)
+
         x = self.outblock(x)
-        return x
+        
+        return x, x_equivariant
 
     def get_anchor(self):
         return self.backbone[-1].get_anchor()

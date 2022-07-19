@@ -16,9 +16,9 @@ class EPNNetVLAD(nn.Module):
         self.opt = opt
         
         # epn param
-        mlps=[[64]]
-        out_mlps=[mlps[0][-1], cfg.LOCAL_FEATURE_DIM]
-        self.epn = frontend.build_model(self.opt, mlps, out_mlps, outblock='linear')
+        self.mlps=[[64]]
+        out_mlps=[self.mlps[-1][0], cfg.LOCAL_FEATURE_DIM]
+        self.epn = frontend.build_model(self.opt, self.mlps, out_mlps, outblock='linear')
         print('EPN', self.epn)
         
         # netvlad

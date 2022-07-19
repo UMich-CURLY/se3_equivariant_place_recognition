@@ -56,10 +56,11 @@ TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
 TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
 
 
-def log_string(out_str):
+def log_string(out_str, printout=True):
     LOG_FOUT.write(out_str + '\n')
     LOG_FOUT.flush()
-    print(out_str)
+    if printout:
+        print(out_str)
 
 
 def main():
@@ -211,11 +212,11 @@ def train_one_epoch(model, optimizer, loss_function, epoch):
                 break
 
         if(faulty_tuple):
-            log_string('---- Iteration ' + str(i) + '/'+ str(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES) + ' | FAULTY TUPLE -----')
+            log_string('---- Iteration ' + str(i) + '/'+ str(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES) + ' | FAULTY TUPLE -----', False)
             continue
 
         if(no_other_neg):
-            log_string('---- Iteration ' + str(i) + '/'+ str(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES) + ' | NO OTHER NEG -----')
+            log_string('---- Iteration ' + str(i) + '/'+ str(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES) + ' | NO OTHER NEG -----', False)
             continue
 
         queries = []
@@ -235,7 +236,7 @@ def train_one_epoch(model, optimizer, loss_function, epoch):
         positives = np.array(positives, dtype=np.float32)
         negatives = np.array(negatives, dtype=np.float32)
         if (len(queries.shape) != 4):
-            log_string('---- Iteration ' + str(i) + '/'+ str(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES) + ' | FAULTY QUERY -----')
+            log_string('---- Iteration ' + str(i) + '/'+ str(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES) + ' | FAULTY QUERY -----', False)
             continue
 
         ''' SERIOUSLY TRAINING'''
@@ -278,11 +279,11 @@ def train_one_epoch(model, optimizer, loss_function, epoch):
                         break
 
                 if(faulty_eval_tuple):
-                    log_string('----' + str(i) + ' | FAULTY EVAL TUPLE' + '-----')
+                    log_string('----' + str(i) + ' | FAULTY EVAL TUPLE' + '-----', False)
                     continue
 
                 if(no_other_neg):
-                    log_string('----' + str(i) + ' | NO OTHER NEG EVAL' + '-----')
+                    log_string('----' + str(i) + ' | NO OTHER NEG EVAL' + '-----', False)
                     continue  
 
                 eval_batches_counted+=1

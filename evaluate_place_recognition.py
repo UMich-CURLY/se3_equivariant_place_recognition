@@ -164,17 +164,24 @@ def plot_average_recall_curve(ave_recall, ave_one_percent_recall, opt):
         else:
             plt.plot(index, ave_recall, 'b', label='EPN-NetVLAD, AR@1%%=%.2f' % (ave_one_percent_recall))
     elif cfg.EVAL_MODEL == 'atten_epn_netvlad':
-        plt.plot(index, ave_recall, 'b', label='EPN-NetVLAD Attentive Downsample, AR@1%%=%.2f' % (ave_one_percent_recall))
+        if opt.model.kanchor == 20:
+            plt.plot(index, ave_recall, 'b', label='EPN-NetVLAD 20 anchors, AR@1%%=%.2f' % (ave_one_percent_recall))
+        else:
+            plt.plot(index, ave_recall, 'b', label='EPN-NetVLAD Attentive Downsample, AR@1%%=%.2f' % (ave_one_percent_recall))
+
     else:
         print('Model not available')
 
     # plot average recall curve for baselines, optional
     try:
-        for baseline_result_folder, baseline_name, plot_style in zip([cfg.POINTNETVLAD_RESULT_FOLDER, \
+        for baseline_result_folder, baseline_name, plot_style in zip([cfg.BASELINE_RESULT_FOLDER, \
+                                                                      cfg.POINTNETVLAD_RESULT_FOLDER, \
                                                                       cfg.SCANCONTEXT_RESULT_FOLDER, \
-                                                                      cfg.M2DP_RESULT_FOLDER], 
-                                                                      ['PointNetVLAD', 'Scan Context', 'M2DP'],
-                                                                      ['k--', 'm-.', 'g:']):
+                                                                      cfg.M2DP_RESULT_FOLDER \
+                                                                     ], 
+                                                                      ['EPN-NetVLAD 60 anchors', \
+                                                                       'PointNetVLAD', 'Scan Context', 'M2DP'],
+                                                                      ['c', 'k--', 'm-.', 'g:']):
 
             ave_one_percent_recall_baseline = None
             with open(os.path.join(baseline_result_folder, 'results.txt'), "r") as baseline_result_file:
@@ -198,7 +205,7 @@ def plot_average_recall_curve(ave_recall, ave_one_percent_recall, opt):
     plt.ylabel('Average recall @N')
     plt.xlim(-1,26)
     plt.ylim(0,1.1)
-    plt.legend()
+    plt.legend(loc='lower right')
     plt.tight_layout()
     plt.savefig(os.path.join(cfg.RESULTS_FOLDER, "average_recall_curve.png"))
     print('Average recall curve is saved at:', os.path.join(cfg.RESULTS_FOLDER, "average_recall_curve.png"))
@@ -267,11 +274,14 @@ def get_precision_recall_curve(QUERY_SETS, QUERY_VECTORS, DATABASE_VECTORS, opt,
 
     # plot precision-recall curve for baselines, optional
     try:
-        for baseline_result_folder, baseline_name, plot_style in zip([cfg.POINTNETVLAD_RESULT_FOLDER, \
+        for baseline_result_folder, baseline_name, plot_style in zip([cfg.BASELINE_RESULT_FOLDER, \
+                                                                      cfg.POINTNETVLAD_RESULT_FOLDER, \
                                                                       cfg.SCANCONTEXT_RESULT_FOLDER, \
-                                                                      cfg.M2DP_RESULT_FOLDER], 
-                                                                      ['PointNetVLAD', 'Scan Context', 'M2DP'],
-                                                                      ['k--', 'm-.', 'g:']):
+                                                                      cfg.M2DP_RESULT_FOLDER \
+                                                                     ], 
+                                                                      ['EPN-NetVLAD Attentive Downsampling 60 anchors', \
+                                                                       'PointNetVLAD', 'Scan Context', 'M2DP'],
+                                                                      ['c', 'k--', 'm-.', 'g:']):
 
             precision_baseline = np.load(os.path.join(baseline_result_folder, 'precision.npy'))
             recall_baseline = np.load(os.path.join(baseline_result_folder, 'recall.npy'))
@@ -284,7 +294,7 @@ def get_precision_recall_curve(QUERY_SETS, QUERY_VECTORS, DATABASE_VECTORS, opt,
     plt.ylabel('Precision')
     plt.xlim(0,1.1)
     plt.ylim(0,1.1)
-    plt.legend()
+    plt.legend(loc='lower right')
     plt.tight_layout()
     plt.savefig(os.path.join(cfg.RESULTS_FOLDER, "precision_recall_oxford.png"))
     print('Precision-recall curve is saved at:', os.path.join(cfg.RESULTS_FOLDER, "precision_recall_oxford.png"))
@@ -298,21 +308,27 @@ def get_f1_recall_curve(opt):
 
     # Plot F1-recall curve
     plt.figure()
-    if cfg.EVAL_MODEL == 'epn_ca_netvlad' or cfg.EVAL_MODEL == 'epn_ca_netvlad_select':
-        plt.plot(recall, f1, label='EPN-CA-NetVLAD')
-    else:
+    if cfg.EVAL_MODEL == 'epn_netvlad':
         if opt.model.kanchor == 20:
             plt.plot(recall, f1, 'b', label='EPN-NetVLAD 20 anchors')
         else:
             plt.plot(recall, f1, 'b', label='EPN-NetVLAD')
+    elif cfg.EVAL_MODEL =='atten_epn_netvlad':
+        if opt.model.kanchor == 20:
+            plt.plot(recall, f1, 'b', label='EPN-NetVLAD Attentive Downsampling 20 anchors')
+        else:
+            plt.plot(recall, f1, 'b', label='EPN-NetVLAD Attentive Downsampling')
 
     # plot f1-recall curve for baselines, optional
     try:
-        for baseline_result_folder, baseline_name, plot_style in zip([cfg.POINTNETVLAD_RESULT_FOLDER, \
+        for baseline_result_folder, baseline_name, plot_style in zip([cfg.BASELINE_RESULT_FOLDER, \
+                                                                      cfg.POINTNETVLAD_RESULT_FOLDER, \
                                                                       cfg.SCANCONTEXT_RESULT_FOLDER, \
-                                                                      cfg.M2DP_RESULT_FOLDER], 
-                                                                      ['PointNetVLAD', 'Scan Context', 'M2DP'],
-                                                                      ['k--', 'm-.', 'g:']):
+                                                                      cfg.M2DP_RESULT_FOLDER \
+                                                                     ], 
+                                                                      ['EPN-NetVLAD Attentive Downsampling 60 anchors', \
+                                                                       'PointNetVLAD', 'Scan Context', 'M2DP'],
+                                                                      ['c', 'k--', 'm-.', 'g:']):
 
             f1_baseline = np.load(os.path.join(baseline_result_folder, 'f1.npy'))
             recall_baseline = np.load(os.path.join(baseline_result_folder, 'recall.npy'))
@@ -325,7 +341,7 @@ def get_f1_recall_curve(opt):
     plt.ylabel('F1 Score')
     plt.xlim(0,1.1)
     plt.ylim(0,1.1)
-    plt.legend()
+    plt.legend(loc='lower right')
     plt.tight_layout()
     plt.savefig(os.path.join(cfg.RESULTS_FOLDER, "f1_recall_oxford.png"))
     print('F1-recall curve is saved at:', os.path.join(cfg.RESULTS_FOLDER, "f1_recall_oxford.png"))
