@@ -45,5 +45,5 @@ Results show the precision-recall curve, f1-recall curve, and average recall at 
 ![](media/average_recall_curve.png)
 
 ## Reference Code
-- [EPN-PointCloud](https://github.com/nintendops/EPN_PointCloud): Equivariant Point Network (EPN). We modified it to be our SE(3)-invariant point cloud local feature extractor in oour framework.
+- [EPN-PointCloud](https://github.com/nintendops/EPN_PointCloud): Equivariant Point Network (EPN). We modified it to be our SE(3)-invariant point cloud local feature extractor in our framework.
 - [PointNetVLAD in Tensorflow](https://github.com/mikacuy/pointnetvlad) and [PointNetVlad-Pytorch](https://github.com/cattaneod/PointNetVlad-Pytorch). We utilized the benchmark_dataset, code for training with quadruplet loss, and place recognition evaluation.
