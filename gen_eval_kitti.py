@@ -82,7 +82,7 @@ def get_evaluate_dict(ids, output_dir):
                 # print('time_diff:', time_diff, 'type:',type(time_diff))
                 if (time_diff - prev_time> 0.2):
                     query_bin = os.path.join(base_path, id, 'velodyne', '%06d' % int(t1)+".bin")
-                    # if ( (time_diff < 100) or (time_diff > 259 and time_diff<=264 ) ):  
+                    # if ( (time_diff < 100) or (time_diff > 259 and time_diff<=264 ) ):  #seq 08
                     if (time_diff < 170):  #seq 00
                         print('pose:',dataset.poses[t1][0::2, -1])
                         database[len(database.keys())] = {'query_velo': query_bin, 'x': dataset.poses[t1][0::2, -1][0], 'z': dataset.poses[t1][0::2, -1][1]}
