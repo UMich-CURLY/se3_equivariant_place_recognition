@@ -1,8 +1,3 @@
-"""
-EPN network architechture for place recognition (Oxford dataset)
-Adapted from https://github.com/nintendops/EPN_PointCloud/blob/main/SPConvNets/models/inv_so3net_pn.py
-"""
-
 import math
 import os
 import numpy as np
@@ -16,65 +11,67 @@ import json
 import vgtk
 import SPConvNets.utils as M
 import vgtk.spconv.functional as L
-import config as cfg
 
-class PRSO3ConvModel(nn.Module):
-    def __init__(self, params, outblock):
-        super(PRSO3ConvModel, self).__init__()
+class InvSO3ConvModel(nn.Module):
+    def __init__(self, params):
+        super(InvSO3ConvModel, self).__init__()
 
         self.backbone = nn.ModuleList()
         for block_param in params['backbone']:
             self.backbone.append(M.BasicSO3ConvBlock(block_param))
 
-        if outblock is not None:
-            if outblock == 'linear':
-                self.outblock = M.FinalLinear(params['outblock'])
-        else:
-            self.outblock = M.InvOutBlockMVD_nomax(params['outblock'])
+        self.outblock = M.InvOutBlockMVD(params['outblock'])
+        # self.outblock = M.InvOutBlockPointnet(params['outblock'])
         self.na_in = params['na']
         self.invariance = True
 
     def forward(self, x):
         # nb, np, 3 -> [nb, 3, np] x [nb, 1, np, na]
         x = M.preprocess_input(x, self.na_in, False)
+        # x = M.preprocess_input(x, 1)
 
         for block_i, block in enumerate(self.backbone):
             x = block(x)
 
-        x_equivariant = x.feats.clone().detach().squeeze(0)
-        pcd_downsampled = x.xyz.clone().detach().squeeze(0)
-
         x = self.outblock(x)
-        
-        return x, x_equivariant, pcd_downsampled
+        return x
 
     def get_anchor(self):
         return self.backbone[-1].get_anchor()
 
 # Full Version
 def build_model(opt,
-                mlps=[[32,32], [64,64], [128,128]], 
+                mlps=[[32,32], [64,64], [128,128], [128,128]],
                 out_mlps=[128, 64],
-                strides=[1, 1, 1, 1],
+                strides=[2, 2, 2, 2],
                 initial_radius_ratio = 0.2,
-                sampling_ratio = 0.8, 
-                sampling_density = 0.4, 
+                sampling_ratio = 0.8, #0.4, 0.36
+                sampling_density = 0.5,
                 kernel_density = 1,
                 kernel_multiplier = 2,
-                sigma_ratio= 0.5, 
-                xyz_pooling = None, 
-                to_file=None,
-                outblock=None):
+                sigma_ratio= 0.5, # 1e-3, 0.68
+                xyz_pooling = None, # None, 'no-stride'
+                to_file=None):
 
     device = opt.device
-    input_num= cfg.NUM_POINTS 
+    input_num= opt.model.input_num
     dropout_rate= opt.model.dropout_rate
     temperature= opt.train_loss.temperature
     so3_pooling =  opt.model.flag
     input_radius = opt.model.search_radius
     kpconv = opt.model.kpconv
 
+    p_pool_first = opt.model.p_pool_first
+    permute_nl = opt.model.permute_nl
+
     na = 1 if opt.model.kpconv else opt.model.kanchor
+
+    # to accomodate different input_num
+    if input_num > 1024:
+        sampling_ratio /= (input_num / 1024)
+        strides[0] = int(2 * (input_num / 1024))
+        print("Using sampling_ratio:", sampling_ratio)
+        print("Using strides:", strides)
 
     print("[MODEL] USING RADIUS AT %f"%input_radius)
     params = {'name': 'Invariant ZPConv Model',
@@ -95,9 +92,12 @@ def build_model(opt,
 
     radius_ratio = [initial_radius_ratio * multiplier**sampling_density for multiplier in stride_multipliers]
 
+    # radius_ratio = [0.25, 0.5]
     radii = [r * input_radius for r in radius_ratio]
 
     # Compute sigma
+    # weighted_sigma = [sigma_ratio * radii[i]**2 * stride_multipliers[i] for i in range(n_layer + 1)]
+
     weighted_sigma = [sigma_ratio * radii[0]**2]
     for idx, s in enumerate(strides):
         weighted_sigma.append(weighted_sigma[idx] * s)
@@ -112,6 +112,9 @@ def build_model(opt,
             # TODO: WARNING: Neighbor here did not consider the actual nn for pooling. Hardcoded in vgtk for now.
             neighbor = int(sampling_ratio * num_centers[i] * radius_ratio[i]**(1/sampling_density))
 
+            if i == 0 and j == 0:
+                neighbor *= int(input_num / 1024)
+
             kernel_size = 1
             if j == 0:
                 # stride at first (if applicable), enforced at first layer
@@ -119,7 +122,8 @@ def build_model(opt,
                 nidx = i if i == 0 else i+1
                 # nidx = i if (i == 0 or xyz_pooling != 'stride') else i+1
                 if stride_conv:
-                    neighbor *= 2 
+                    neighbor *= 2 # * int(sampling_ratio * num_centers[i] * radius_ratio[i]**(1/sampling_density))
+                    # neighbor = int(sampling_ratio * num_centers[i] * radius_ratio[i+1]**(1/sampling_density))
                     kernel_size = 1 # if inter_stride < 4 else 3
             else:
                 inter_stride = 1
@@ -128,17 +132,19 @@ def build_model(opt,
             print(f"At block {i}, layer {j}!")
             print(f'neighbor: {neighbor}')
             print(f'stride: {inter_stride}')
-            print(f'radius : {radii[nidx]}')
-            print(f'sigma : {weighted_sigma[nidx]}')
+
+            sigma_to_print = weighted_sigma[nidx]**2 / 3
+            print(f'sigma: {sigma_to_print}')
+            print(f'radius ratio: {radius_ratio[nidx]}')
+            # import ipdb; ipdb.set_trace()
 
             # one-inter one-intra policy
             if na == 60:
                 block_type = 'separable_block' 
             elif na == 12:
                 block_type = 'separable_s2_block'
-            elif na < 60:
-                block_type = 'inter_block'
-            # block_type = 'inter_block' if na != 60  else 'separable_block'
+            else:
+                raise ValueError(f"na={na} not supported.")
 
             conv_param = {
                 'type': block_type,
@@ -170,14 +176,16 @@ def build_model(opt,
         'pooling': so3_pooling,
         'temperature': temperature,
         'kanchor': na,
+        'p_pool_first': p_pool_first,
+        'permute_nl': permute_nl,
     }
 
 
     if to_file is not None:
         with open(to_file, 'w') as outfile:
             json.dump(params, outfile)
-    
-    model = PRSO3ConvModel(params, outblock).to(device)
+
+    model = InvSO3ConvModel(params).to(device)
     return model
 
 def build_model_from(opt, outfile_path=None):

@@ -37,7 +37,7 @@ def cuda_extension(package_name, ext):
 pkg_name = PACKAGE_NAME
 ext_modules = [cuda_extension(pkg_name, ext) for ext in EXT_MODULES]
 pkgs = [pkg_name] + [f"{pkg_name}.{pkg}" for pkg in PACKAGES]
-# install_reqs = [req for req in INSTALL_REQUIREMENTS]
+install_reqs = [req for req in INSTALL_REQUIREMENTS]
 
 
 setup(
@@ -50,7 +50,7 @@ setup(
     packages=pkgs,
     package_data={'':['*.ply']},
     include_package_data=True,
-    # install_requires=install_reqs,
+    install_requires=install_reqs,
     ext_modules=ext_modules,
     cmdclass = {'build_ext': BuildExtension}
 )

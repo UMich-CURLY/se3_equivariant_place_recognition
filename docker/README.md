@@ -5,7 +5,7 @@ This folder contains instructions on creating a docker image that includes PyTor
 
 build image
 ```
-docker build --tag epnnetvlad/epnnetvlad_docker .
+docker build --tag umcurly/e2pn_docker .
 ```
 change folder direction in line 15, then build container
 ```

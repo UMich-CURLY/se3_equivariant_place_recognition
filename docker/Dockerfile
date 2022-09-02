@@ -14,6 +14,7 @@ RUN pip install -U scikit-learn
 RUN pip install pykitti
 RUN pip install opencv-python
 RUN pip install wandb -qqq
+RUN pip install ninja
 
 # build essential, cmake, vim, git
 RUN apt-get update && apt-get -y install cmake
@@ -34,3 +35,6 @@ RUN pip install imageio
 RUN pip install plyfile
 RUN pip install parse
 RUN pip install colour
+
+# for GeM
+RUN pip install MinkowskiEngine

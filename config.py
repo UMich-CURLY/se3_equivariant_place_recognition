@@ -6,15 +6,16 @@
 NUM_POINTS = 4096
 # data path
 DATASET_FOLDER = '/home/cel/data/benchmark_datasets'
+# DATASET_FOLDER = '/home/cel/data/kitti'
 
 #####################
 # TRAINING SETTINGS #
 #####################
 ''' GLOBAL '''
 # specify the experient name, training process will be saved in the folder with the same name
-EXP_NAME = 'atten_epn_netvlad_test' 
+EXP_NAME = 'e2pn_gem_exact_trainall' 
 # choose the model to be trained from 'epn_netvlad' or 'atten_epn_netvlad'
-MODEL = 'atten_epn_netvlad'
+MODEL = 'e2pn_gem' # 'e2pn_gem' # 'e2pn_netvlad'
 
 ''' TRAINING PICKLE FILES '''
 # use the picke files in the following two lines for whole benchmark training
@@ -31,12 +32,14 @@ GLOBAL_DESCRIPTOR_DIM = 256
 LOCAL_FEATURE_DIM = 1024
 # number of points after attentive downsampling, not used if training with model 'epn_netvlad'
 NUM_SELECTED_POINTS = 2048
+# number of points if using stride in E2PN
+# NUM_SUPERPOINTS = 512
 
 ''' DATA LOADER '''
 # batch number setting, how many positive and negatives per query during training
 BATCH_NUM_QUERIES = 1
 TRAIN_POSITIVES_PER_QUERY = 2
-TRAIN_NEGATIVES_PER_QUERY = 16
+TRAIN_NEGATIVES_PER_QUERY = 2
 # Is this training resume from previous training?
 RESUME = False
 
@@ -70,12 +73,14 @@ GPU = '0'
 #######################
 ''' GLOBAL '''
 # choose the model to evaluate from 'epn_netvlad' or 'atten_epn_netvlad'
-EVAL_MODEL = 'atten_epn_netvlad'
+EVAL_MODEL = 'e2pn_netvlad' # 'e2pn_gem' # 'e2pn_netvlad'
 # the pretrained weights that you want to load into the model
-# RESUME_FILENAME = 'pretrained_models/test.ckpt'
-RESUME_FILENAME = LOG_DIR+EXP_NAME+'/'+MODEL_FILENAME
+RESUME_FILENAME = 'pretrained_model/e2pn_netvlad_v2_train3seq.ckpt'
+# RESUME_FILENAME = 'pretrained_model/e2pn_netvlad_32_64_trainall.ckpt'
+# RESUME_FILENAME = LOG_DIR+EXP_NAME+'/'+MODEL_FILENAME
 # save paths for the evaluation results
-RESULTS_FOLDER = 'results/pr_evaluation_atten_epn_netvlad_test'
+# RESULTS_FOLDER = 'results/pr_evaluation_e2pn_netvlad_32_64_128_3seq'
+RESULTS_FOLDER = 'results/pr_evaluation_e2pn_netvlad_v2_train3seq_eval'
 OUTPUT_FILE = RESULTS_FOLDER+'/results.txt'
 
 ''' DATA LOADER '''
@@ -91,18 +96,30 @@ EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_query.pic
 # use the picke files in the following two lines for U.S. benchmark evaluation
 # EVAL_DATABASE_FILE = '/home/cel/data/benchmark_datasets/university_evaluation_database.pickle'
 # EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/university_evaluation_query.pickle'
-# use the picke files in the following two lines for B.D. benchmark evaluation
-# EVAL_DATABASE_FILE = '/home/cel/data/benchmark_datasets/business_evaluation_database.pickle'
-# EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/business_evaluation_query.pickle'
 # use the picke files in the following two lines for R.A. benchmark evaluation
 # EVAL_DATABASE_FILE = '/home/cel/data/benchmark_datasets/residential_evaluation_database.pickle'
 # EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/residential_evaluation_query.pickle'
+# use the picke files in the following two lines for B.D. benchmark evaluation
+# EVAL_DATABASE_FILE = '/home/cel/data/benchmark_datasets/business_evaluation_database.pickle'
+# EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/business_evaluation_query.pickle'
+
+# KITTI
+# EVAL_DATABASE_FILE = '/home/cel/data/kitti/kitti_08_database_evaluate_new.pickle'
+# EVAL_QUERY_FILE = '/home/cel/data/kitti/kitti_08_queries_evaluate_new.pickle'
+# EVAL_DATABASE_FILE = '/home/cel/data/kitti/kitti_08_database_evaluate_new.pickle'
+# EVAL_QUERY_FILE = '/home/cel/data/kitti/kitti_08_queries_evaluate_new.pickle'
+
+# rotation only
+# EVAL_DATABASE_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_database_rot.pickle'
+# EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_query_rot.pickle'
 
 '''BASELINES TO PLOT (OPTIONAL)'''
 POINTNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_pointnetvlad'
 SCANCONTEXT_RESULT_FOLDER = 'results/pr_evaluation_scan_context_oxford_evalall'
 M2DP_RESULT_FOLDER = 'results/pr_evaluation_m2dp_evalall'
-BASELINE_RESULT_FOLDER = 'results/pr_evaluation_atten_epn_netvlad_select_seq567_32_64_1024_ds2048_evalall'
+MINKLOC3D_RESULT_FOLDER = 'results/pr_evaluation_minkloc3d'
+EPNNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_atten_epn_netvlad_na60_trainall'
+E2PNNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_e2pn_netvlad_32_64_trainall'
 
 
 '''cofig to string'''

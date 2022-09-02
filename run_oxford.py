@@ -1,15 +1,18 @@
 """
-Main file for training EPN-NetVLAD on Oxford benchmark
+Main file for training E2PN-NetVLAD on Oxford benchmark
 Adapted from https://github.com/cattaneod/PointNetVlad-Pytorch/blob/master/train_pointnetvlad.py
 """
-import numpy as np
+# Local E2PN package
+import sys
 import os
+sys.path.append(os.path.join(os.path.dirname(__file__),'vgtk') )
+
+import numpy as np
 import torch
 import datetime
 import logging
 from pathlib import Path
 from tqdm import tqdm
-import sys
 import importlib
 import torch.nn as nn
 from sklearn.neighbors import KDTree, NearestNeighbors
@@ -19,13 +22,14 @@ from SPConvNets.options import opt as opt_oxford
 from SPConvNets.utils.loading_pointclouds import *
 import SPConvNets.utils.pointnetvlad_loss as PNV_loss
 
+
 # optional, keep track of training
 import wandb
 
 
 '''PARAMETERS'''
 # try smaller number of anchors
-opt_oxford.model.kanchor = 20
+opt_oxford.model.kanchor = 12
 
 # global parameters
 HARD_NEGATIVES = {}
@@ -56,12 +60,14 @@ TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
 TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
 
 
-def log_string(out_str, printout=True):
+def log_string(out_str, vis=True):
     LOG_FOUT.write(out_str + '\n')
     LOG_FOUT.flush()
-    if printout:
+    if vis:
         print(out_str)
 
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters())
 
 def main():
     global HARD_NEGATIVES, TOTAL_ITERATIONS
@@ -82,12 +88,12 @@ def main():
         })
     
     '''MODEL LOADING'''
-    if cfg.MODEL == 'epn_netvlad': 
-        from SPConvNets.models.epn_netvlad import EPNNetVLAD
-        model = EPNNetVLAD(opt_oxford)
-    elif cfg.MODEL == 'atten_epn_netvlad':
-        from SPConvNets.models.atten_epn_netvlad import Atten_EPN_NetVLAD
-        model = Atten_EPN_NetVLAD(opt_oxford)
+    if cfg.MODEL == 'e2pn_netvlad': 
+        from SPConvNets.models.e2pn_netvlad import E2PNNetVLAD
+        model = E2PNNetVLAD(opt_oxford)
+    elif cfg.MODEL == 'e2pn_gem': 
+        from SPConvNets.models.e2pn_gem import E2PNGeM
+        model = E2PNGeM(opt_oxford)
     else:
         log_string('Model not available, exiting the code')
         exit(0)
@@ -130,6 +136,7 @@ def main():
 
 
     model = nn.DataParallel(model)
+    print('Number of Parameters:', count_parameters(model))
 
     LOG_FOUT.write(cfg.cfg_str())
     LOG_FOUT.write('\n')
@@ -212,11 +219,11 @@ def train_one_epoch(model, optimizer, loss_function, epoch):
                 break
 
         if(faulty_tuple):
-            log_string('---- Iteration ' + str(i) + '/'+ str(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES) + ' | FAULTY TUPLE -----', False)
+            log_string('---- Iteration ' + str(i) + '/'+ str(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES) + ' | FAULTY TUPLE -----', vis=False)
             continue
 
         if(no_other_neg):
-            log_string('---- Iteration ' + str(i) + '/'+ str(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES) + ' | NO OTHER NEG -----', False)
+            log_string('---- Iteration ' + str(i) + '/'+ str(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES) + ' | NO OTHER NEG -----', vis=False)
             continue
 
         queries = []
@@ -236,7 +243,7 @@ def train_one_epoch(model, optimizer, loss_function, epoch):
         positives = np.array(positives, dtype=np.float32)
         negatives = np.array(negatives, dtype=np.float32)
         if (len(queries.shape) != 4):
-            log_string('---- Iteration ' + str(i) + '/'+ str(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES) + ' | FAULTY QUERY -----', False)
+            log_string('---- Iteration ' + str(i) + '/'+ str(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES) + ' | FAULTY QUERY -----', vis=False)
             continue
 
         ''' SERIOUSLY TRAINING'''
@@ -279,11 +286,11 @@ def train_one_epoch(model, optimizer, loss_function, epoch):
                         break
 
                 if(faulty_eval_tuple):
-                    log_string('----' + str(i) + ' | FAULTY EVAL TUPLE' + '-----', False)
+                    log_string('----' + str(i) + ' | FAULTY EVAL TUPLE' + '-----', vis=False)
                     continue
 
                 if(no_other_neg):
-                    log_string('----' + str(i) + ' | NO OTHER NEG EVAL' + '-----', False)
+                    log_string('----' + str(i) + ' | NO OTHER NEG EVAL' + '-----', vis=False)
                     continue  
 
                 eval_batches_counted+=1

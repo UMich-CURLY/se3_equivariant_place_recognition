@@ -12,8 +12,8 @@ docker run -it --net=host --shm-size 8G --gpus all  \
   -v "/tmp/.X11-unix:/tmp/.X11-unix:rw" \
   -v "/etc/passwd:/etc/passwd:rw" \
   -e "TERM=xterm-256color" \
-  -v "/media/sde1/cel/DockerFolder:/home/$USER/" \
+  -v "/home/$USER/DockerFolder:/home/$USER/" \
   --device=/dev/dri:/dev/dri \
   --name=${container_name} \
   --security-opt seccomp=unconfined \
-  epnnetvlad/epnnetvlad_docker:latest
+  umcurly/e2pn_docker:latest

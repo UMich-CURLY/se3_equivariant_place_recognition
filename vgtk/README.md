@@ -1,5 +1,5 @@
 # vgtk
-Vision-Graphics deep learning ToolKit from [EPN-PointCloud](https://github.com/nintendops/EPN_PointCloud)
+Vision-Graphics deep learning ToolKit
 
 
 ## Rotation Matrix
