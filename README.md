@@ -39,6 +39,10 @@ The original 3DMatch training and evaluation dataset can be found [here](https:/
 
 Pretrained model can be downloaded using this [link](https://drive.google.com/file/d/1vy9FRGWQsuVi4nf--YIqg_8yHFiWWJhh/view?usp=sharing) -->
 
+**Pretrained Weights**
+EPN-NetVLAD: [link](https://drive.google.com/file/d/1VuBSSi5CsXB73iYtl8Fn3nNBs9i90iNA/view?usp=sharing)
+E$\^2$PN-NetVLAD: [link](https://drive.google.com/file/d/1ziFfZ1NmGCBKofCEMcPHw6cgee0-nRpa/view?usp=sharing)
+
 **Training**
 
 The following lines can be used for the training of each experiment
