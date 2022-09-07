@@ -73,14 +73,14 @@ GPU = '0'
 #######################
 ''' GLOBAL '''
 # choose the model to evaluate from 'epn_netvlad' or 'atten_epn_netvlad'
-EVAL_MODEL = 'e2pn_netvlad' # 'e2pn_gem' # 'e2pn_netvlad'
+EVAL_MODEL = 'e2pn_gem' # 'e2pn_gem' # 'e2pn_netvlad'
 # the pretrained weights that you want to load into the model
-RESUME_FILENAME = 'pretrained_model/e2pn_netvlad_v2_train3seq.ckpt'
+RESUME_FILENAME = 'pretrained_model/e2pn_gem_exact_trainall.ckpt'
 # RESUME_FILENAME = 'pretrained_model/e2pn_netvlad_32_64_trainall.ckpt'
 # RESUME_FILENAME = LOG_DIR+EXP_NAME+'/'+MODEL_FILENAME
 # save paths for the evaluation results
 # RESULTS_FOLDER = 'results/pr_evaluation_e2pn_netvlad_32_64_128_3seq'
-RESULTS_FOLDER = 'results/pr_evaluation_e2pn_netvlad_v2_train3seq_eval'
+RESULTS_FOLDER = 'results/pr_evaluation_e2pn_gem_exact_trainall_evalrot'
 OUTPUT_FILE = RESULTS_FOLDER+'/results.txt'
 
 ''' DATA LOADER '''
@@ -104,14 +104,14 @@ EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_query.pic
 # EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/business_evaluation_query.pickle'
 
 # KITTI
-# EVAL_DATABASE_FILE = '/home/cel/data/kitti/kitti_08_database_evaluate_new.pickle'
-# EVAL_QUERY_FILE = '/home/cel/data/kitti/kitti_08_queries_evaluate_new.pickle'
+# EVAL_DATABASE_FILE = '/home/cel/data/kitti/kitti_00_database_evaluate_new.pickle'
+# EVAL_QUERY_FILE = '/home/cel/data/kitti/kitti_00_queries_evaluate_new.pickle'
 # EVAL_DATABASE_FILE = '/home/cel/data/kitti/kitti_08_database_evaluate_new.pickle'
 # EVAL_QUERY_FILE = '/home/cel/data/kitti/kitti_08_queries_evaluate_new.pickle'
 
 # rotation only
-# EVAL_DATABASE_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_database_rot.pickle'
-# EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_query_rot.pickle'
+EVAL_DATABASE_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_database_rot.pickle'
+EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_query_rot.pickle'
 
 '''BASELINES TO PLOT (OPTIONAL)'''
 POINTNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_pointnetvlad'
@@ -119,7 +119,7 @@ SCANCONTEXT_RESULT_FOLDER = 'results/pr_evaluation_scan_context_oxford_evalall'
 M2DP_RESULT_FOLDER = 'results/pr_evaluation_m2dp_evalall'
 MINKLOC3D_RESULT_FOLDER = 'results/pr_evaluation_minkloc3d'
 EPNNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_atten_epn_netvlad_na60_trainall'
-E2PNNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_e2pn_netvlad_32_64_trainall'
+E2PNNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_e2pn_netvlad_exact_trainall_eval'
 
 
 '''cofig to string'''

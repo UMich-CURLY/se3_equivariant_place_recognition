@@ -33,37 +33,15 @@ def get_sets_dict(filename):
 		return trajectories
 
 def load_pc_file(filename):
-    dataset_folder = '/home/cel/data/kitti'
-    comp_name = os.path.join(dataset_folder,filename)
-    pc = np.fromfile(comp_name, dtype=np.float32).reshape(-1,4)[:,:3] # xyz
+	#returns Nx3 matrix
+	pc=np.fromfile(filename, dtype=np.float64)
 
-    l = 25
-    ind = np.argwhere(pc[:, 0] <= l).reshape(-1)
-    pc = pc[ind]
-    ind = np.argwhere(pc[:, 0] >= -l).reshape(-1)
-    pc = pc[ind]
-    ind = np.argwhere(pc[:, 1] <= l).reshape(-1)
-    pc = pc[ind]
-    ind = np.argwhere(pc[:, 1] >= -l).reshape(-1)
-    pc = pc[ind]
-    ind = np.argwhere(pc[:, 2] <= l).reshape(-1)
-    pc = pc[ind]
-    ind = np.argwhere(pc[:, 2] >= -l).reshape(-1)
-    pc = pc[ind]
-    # sample to cfg.NUM_POINTS #4096
-    if pc.shape[0] >= cfg.NUM_POINTS:
-        ind = np.random.choice(pc.shape[0], cfg.NUM_POINTS, replace=False)
-        pc = pc[ind, :]
-    else:
-        ind = np.random.choice(pc.shape[0], cfg.NUM_POINTS, replace=True)
-        pc = pc[ind, :]
-    # rescale to [-1,1] with zero mean
-    mean = np.mean(pc, axis=0)
-    pc = pc - mean
-    scale = np.max(abs(pc))
-    pc = pc/scale
+	if(pc.shape[0]!= cfg.NUM_POINTS*3):
+		print("Error in pointcloud shape")
+		return np.array([])
 
-    return pc
+	pc=np.reshape(pc,(pc.shape[0]//3,3))
+	return pc
 
 def load_pc_files(filenames, opt):
 	pcs=[]
@@ -150,6 +128,8 @@ def evaluate_model(model, opt):
     print('Calculating average recall...')
     for m in tqdm(range(len(DATABASE_SETS))):
         for n in range(len(QUERY_SETS)):
+            if (m == n):
+                continue
             pair_recall, pair_similarity, pair_opr = get_recall(
                 m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS)
             recall += np.array(pair_recall)
@@ -177,13 +157,13 @@ def evaluate_model(model, opt):
         output.write("Average Top 1% Recall:\n")
         output.write(str(ave_one_percent_recall))
 
+    plot_average_recall_curve(ave_recall, ave_one_percent_recall, opt)
+
+    # precision-recall curve
+    get_precision_recall_curve(QUERY_SETS, QUERY_VECTORS, DATABASE_VECTORS, opt, ave_one_percent_recall)
+    get_f1_recall_curve(opt)
+
     print('ave_recall\n', ave_recall)
-
-    # plot_average_recall_curve(ave_recall, ave_one_percent_recall, opt)
-
-    # # precision-recall curve
-    # get_precision_recall_curve(QUERY_SETS, QUERY_VECTORS, DATABASE_VECTORS, opt, ave_one_percent_recall)
-    # get_f1_recall_curve(opt)
 
     return ave_one_percent_recall
 
@@ -197,12 +177,14 @@ def plot_average_recall_curve(ave_recall, ave_one_percent_recall, opt):
         for baseline_result_folder, baseline_name, plot_style in zip([cfg.SCANCONTEXT_RESULT_FOLDER, \
                                                                       cfg.M2DP_RESULT_FOLDER, \
                                                                       cfg.POINTNETVLAD_RESULT_FOLDER, \
-                                                                      cfg.BASELINE_RESULT_FOLDER \
+                                                                      cfg.MINKLOC3D_RESULT_FOLDER, \
+                                                                      cfg.EPNNETVLAD_RESULT_FOLDER, \
+                                                                      cfg.E2PNNETVLAD_RESULT_FOLDER \
                                                                      ], 
-                                                                     ['Scan Context', 'M2DP', 'PointNetVLAD', \
-                                                                      'EPN-NetVLAD'\
+                                                                     ['Scan Context', 'M2DP', 'PointNetVLAD', 'MinkLoc3D', \
+                                                                      'EPN-NetVLAD', 'E$^2$PN-NetVLAD'\
                                                                      ],
-                                                                     ['m-.', 'g:', 'k--', 'c']):
+                                                                     ['m-.', 'g-.', 'k--', 'y:', 'c', 'r']):
 
             ave_one_percent_recall_baseline = None
             with open(os.path.join(baseline_result_folder, 'results.txt'), "r") as baseline_result_file:
@@ -221,7 +203,7 @@ def plot_average_recall_curve(ave_recall, ave_one_percent_recall, opt):
     except:
         print('error plotting baselines curve')
 
-    plt.plot(index, ave_recall, 'b', label='E$^2$PN-NetVLAD, AR@1%%=%.2f' % (ave_one_percent_recall))
+    plt.plot(index, ave_recall, 'b', label='E$^2$PN-GeM, AR@1%%=%.2f' % (ave_one_percent_recall))
     
     plt.title("Average recall @N Curve")
     plt.xlabel('in top N')
@@ -288,12 +270,14 @@ def get_precision_recall_curve(QUERY_SETS, QUERY_VECTORS, DATABASE_VECTORS, opt,
         for baseline_result_folder, baseline_name, plot_style in zip([cfg.SCANCONTEXT_RESULT_FOLDER, \
                                                                       cfg.M2DP_RESULT_FOLDER, \
                                                                       cfg.POINTNETVLAD_RESULT_FOLDER, \
-                                                                      cfg.BASELINE_RESULT_FOLDER \
+                                                                      cfg.MINKLOC3D_RESULT_FOLDER, \
+                                                                      cfg.EPNNETVLAD_RESULT_FOLDER, \
+                                                                      cfg.E2PNNETVLAD_RESULT_FOLDER \
                                                                      ], 
-                                                                     ['Scan Context', 'M2DP', 'PointNetVLAD', \
-                                                                      'EPN-NetVLAD'\
+                                                                     ['Scan Context', 'M2DP', 'PointNetVLAD', 'MinkLoc3D', \
+                                                                      'EPN-NetVLAD', 'E$^2$PN-NetVLAD'\
                                                                      ],
-                                                                     ['m-.', 'g:', 'k--', 'c']):
+                                                                     ['m-.', 'g-.', 'k--', 'y:', 'c', 'r']):
 
             precision_baseline = np.load(os.path.join(baseline_result_folder, 'precision.npy'))
             recall_baseline = np.load(os.path.join(baseline_result_folder, 'recall.npy'))
@@ -301,7 +285,7 @@ def get_precision_recall_curve(QUERY_SETS, QUERY_VECTORS, DATABASE_VECTORS, opt,
     except:
         print('error plotting baselines curve')
     
-    plt.plot(recall, precision, 'b', label='E$^2$PN-NetVLAD')
+    plt.plot(recall, precision, 'b', label='E$^2$PN-GeM')
     
     plt.title("Precision-recall Curve")
     plt.xlabel('Recall')
@@ -327,12 +311,14 @@ def get_f1_recall_curve(opt):
         for baseline_result_folder, baseline_name, plot_style in zip([cfg.SCANCONTEXT_RESULT_FOLDER, \
                                                                       cfg.M2DP_RESULT_FOLDER, \
                                                                       cfg.POINTNETVLAD_RESULT_FOLDER, \
-                                                                      cfg.BASELINE_RESULT_FOLDER \
+                                                                      cfg.MINKLOC3D_RESULT_FOLDER, \
+                                                                      cfg.EPNNETVLAD_RESULT_FOLDER, \
+                                                                      cfg.E2PNNETVLAD_RESULT_FOLDER \
                                                                      ], 
-                                                                     ['Scan Context', 'M2DP', 'PointNetVLAD', \
-                                                                      'EPN-NetVLAD'\
+                                                                     ['Scan Context', 'M2DP', 'PointNetVLAD', 'MinkLoc3D', \
+                                                                      'EPN-NetVLAD', 'E$^2$PN-NetVLAD'\
                                                                      ],
-                                                                     ['m-.', 'g:', 'k--', 'c']):
+                                                                     ['m-.', 'g-.', 'k--', 'y:', 'c', 'r']):
 
             f1_baseline = np.load(os.path.join(baseline_result_folder, 'f1.npy'))
             recall_baseline = np.load(os.path.join(baseline_result_folder, 'recall.npy'))
@@ -340,7 +326,7 @@ def get_f1_recall_curve(opt):
     except:
         print('error plotting baselines curve')
     
-    plt.plot(recall, f1, 'b', label='E$^2$PN-NetVLAD')
+    plt.plot(recall, f1, 'b', label='E$^2$PN-GeM')
 
     plt.title("F1-recall Curve")
     plt.xlabel('Recall')
@@ -372,7 +358,7 @@ def get_latent_vectors(model, dict_to_process, opt):
                                        batch_num:(q_index+1)*(batch_num)]
         file_names = []
         for index in file_indices:
-            file_names.append(dict_to_process[index]["query_velo"])
+            file_names.append(dict_to_process[index]["query"])
         queries = load_pc_files(file_names, opt)
 
         with torch.no_grad():
@@ -405,7 +391,7 @@ def get_latent_vectors(model, dict_to_process, opt):
         file_indices = eval_file_idxs[index_edge:len(dict_to_process.keys())]
         file_names = []
         for index in file_indices:
-            file_names.append(dict_to_process[index]["query_velo"])
+            file_names.append(dict_to_process[index]["query"])
         queries = load_pc_files(file_names, opt)
 
         with torch.no_grad():

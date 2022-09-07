@@ -21,7 +21,7 @@ class E2PNGeM(nn.Module):
         self.e2pn = frontend.build_model(self.opt, self.mlps, out_mlps, outblock='linear')
         self.gem = M.GeM()
 
-        print('E2PN', self.e2pn)
+        # print('E2PN', self.e2pn)
 
     def forward(self, x):
         '''
