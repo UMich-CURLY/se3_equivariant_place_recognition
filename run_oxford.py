@@ -25,7 +25,7 @@ import wandb
 
 '''PARAMETERS'''
 # try smaller number of anchors
-opt_oxford.model.kanchor = 20
+opt_oxford.model.kanchor = 60
 
 # global parameters
 HARD_NEGATIVES = {}
@@ -85,6 +85,9 @@ def main():
     if cfg.MODEL == 'epn_netvlad': 
         from SPConvNets.models.epn_netvlad import EPNNetVLAD
         model = EPNNetVLAD(opt_oxford)
+    elif cfg.MODEL == 'epn_gem':
+        from SPConvNets.models.epn_gem import EPNGeM
+        model = EPNGeM(opt_oxford)
     elif cfg.MODEL == 'atten_epn_netvlad':
         from SPConvNets.models.atten_epn_netvlad import Atten_EPN_NetVLAD
         model = Atten_EPN_NetVLAD(opt_oxford)

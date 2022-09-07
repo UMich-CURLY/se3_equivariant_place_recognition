@@ -2,3 +2,4 @@
 from .base_so3conv import *
 from .pointnetvlad_loss import *
 from .NetVLADLoupe import *
+from .gem import *
