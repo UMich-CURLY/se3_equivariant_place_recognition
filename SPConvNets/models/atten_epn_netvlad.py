@@ -21,8 +21,6 @@ class Atten_EPN_NetVLAD(nn.Module):
         self.atten = torch.nn.MultiheadAttention(3, 3, batch_first=True)
 
         # epn param
-        # mlps=[[64], [128]]
-        # out_mlps=[128, cfg.LOCAL_FEATURE_DIM]
         self.mlps=[[32], [64]]
         out_mlps=[self.mlps[-1][0], cfg.LOCAL_FEATURE_DIM]
         

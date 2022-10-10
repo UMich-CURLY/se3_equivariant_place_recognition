@@ -19,7 +19,6 @@ class EPNNetVLAD(nn.Module):
         self.mlps=[[64]]
         out_mlps=[self.mlps[-1][0], cfg.LOCAL_FEATURE_DIM]
         self.epn = frontend.build_model(self.opt, self.mlps, out_mlps, outblock='linear')
-        # print('EPN', self.epn)
         
         # netvlad
         self.netvlad = M.NetVLADLoupe(feature_size=cfg.LOCAL_FEATURE_DIM, max_samples=cfg.NUM_POINTS, cluster_size=64,

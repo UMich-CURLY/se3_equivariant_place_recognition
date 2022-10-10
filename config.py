@@ -4,7 +4,7 @@
 ''' DATA LOADER '''
 # number of points for the input clouds
 NUM_POINTS = 4096
-# data path
+# data path, '/home/cel/data/benchmark_datasets' for oxford and '/home/cel/data/kitti' for kitti
 DATASET_FOLDER = '/home/cel/data/benchmark_datasets'
 
 #####################
@@ -13,16 +13,16 @@ DATASET_FOLDER = '/home/cel/data/benchmark_datasets'
 ''' GLOBAL '''
 # specify the experient name, training process will be saved in the folder with the same name
 EXP_NAME = 'epn_gem_train3seq' 
-# choose the model to be trained from 'epn_netvlad' or 'atten_epn_netvlad'
+# choose the model to be trained from 'epn_netvlad', 'epn_gem', or 'atten_epn_netvlad'
 MODEL = 'epn_gem'
 
 ''' TRAINING PICKLE FILES '''
 # use the picke files in the following two lines for whole benchmark training
-# TRAIN_FILE = '/home/cel/data/benchmark_datasets/training_queries_baseline.pickle'
-# TEST_FILE = '/home/cel/data/benchmark_datasets/test_queries_baseline.pickle'
+TRAIN_FILE = '/home/cel/data/benchmark_datasets/oxford_training_queries_baseline.pickle'
+TEST_FILE = '/home/cel/data/benchmark_datasets/oxford_test_queries_baseline.pickle'
 # use the picke files in the following two lines for a quick training with only 3 sequences in the benchmark
-TRAIN_FILE = '/home/cel/data/benchmark_datasets/training_queries_baseline_seq567.pickle'
-TEST_FILE = '/home/cel/data/benchmark_datasets/test_queries_baseline_seq567.pickle'
+# TRAIN_FILE = '/home/cel/data/benchmark_datasets/oxford_training_queries_3seq.pickle'
+# TEST_FILE = '/home/cel/data/benchmark_datasets/oxford_test_queries_3seq.pickle'
 
 ''' NETWORK DIMENSIONS '''
 # output dimension of the global descriptor
@@ -98,16 +98,11 @@ EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_query.pic
 # EVAL_DATABASE_FILE = '/home/cel/data/benchmark_datasets/residential_evaluation_database.pickle'
 # EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/residential_evaluation_query.pickle'
 
-# rotation only
-# EVAL_DATABASE_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_database_tran.pickle'
-# EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_query_tran.pickle'
-
 '''BASELINES TO PLOT (OPTIONAL)'''
 POINTNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_pointnetvlad'
 SCANCONTEXT_RESULT_FOLDER = 'results/pr_evaluation_scan_context_oxford_evalall'
 M2DP_RESULT_FOLDER = 'results/pr_evaluation_m2dp_evalall'
-# BASELINE_RESULT_FOLDER = 'results/pr_evaluation_atten_epn_netvlad_na60_trainall'
-
+MINKLOC3D_RESULT_FOLDER = 'results/pr_evaluation_minkloc3d'
 
 '''cofig to string'''
 def cfg_str():
