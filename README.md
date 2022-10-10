@@ -59,6 +59,7 @@ For evaluation on KITTI:
 ```
 python eval_kitti.py
 ```
+Baseline results from PointNetVLAD, MinkLoc3D, Scan Context, and M2DP can be downloaded [here](https://drive.google.com/drive/folders/1wBKV_hFplRsIAGiqwXmXx1W4tXxMtc93?usp=sharing).
 
 ### Results
 Results show the precision-recall curve, f1-recall curve, and average recall at top N curve.

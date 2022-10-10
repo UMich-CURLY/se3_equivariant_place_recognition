@@ -12,9 +12,9 @@ DATASET_FOLDER = '/home/cel/data/benchmark_datasets'
 #####################
 ''' GLOBAL '''
 # specify the experient name, training process will be saved in the folder with the same name
-EXP_NAME = 'epn_gem_train3seq' 
+EXP_NAME = 'test' 
 # choose the model to be trained from 'epn_netvlad', 'epn_gem', or 'atten_epn_netvlad'
-MODEL = 'epn_gem'
+MODEL = 'epn_netvlad'
 
 ''' TRAINING PICKLE FILES '''
 # use the picke files in the following two lines for whole benchmark training
@@ -72,10 +72,10 @@ GPU = '0'
 # choose the model to evaluate from 'epn_netvlad' or 'atten_epn_netvlad'
 EVAL_MODEL = 'epn_gem'
 # the pretrained weights that you want to load into the model
-RESUME_FILENAME = 'pretrained_model/epn_gem_train3seq.ckpt'
-# RESUME_FILENAME = LOG_DIR+EXP_NAME+'/'+MODEL_FILENAME
+# RESUME_FILENAME = 'pretrained_model/test.ckpt'
+RESUME_FILENAME = LOG_DIR+EXP_NAME+'/'+MODEL_FILENAME
 # save paths for the evaluation results
-RESULTS_FOLDER = 'results/pr_evaluation_epn_gem_train3seq_eval'
+RESULTS_FOLDER = 'results/pr_evaluation_test'
 OUTPUT_FILE = RESULTS_FOLDER+'/results.txt'
 
 ''' DATA LOADER '''
