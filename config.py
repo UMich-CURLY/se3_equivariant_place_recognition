@@ -108,8 +108,8 @@ EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_query.pic
 
 '''BASELINES TO PLOT (OPTIONAL)'''
 POINTNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_pointnetvlad'
-SCANCONTEXT_RESULT_FOLDER = 'results/pr_evaluation_scan_context_oxford_evalall'
-M2DP_RESULT_FOLDER = 'results/pr_evaluation_m2dp_evalall'
+SCANCONTEXT_RESULT_FOLDER = 'results/pr_evaluation_scan_context'
+M2DP_RESULT_FOLDER = 'results/pr_evaluation_m2dp'
 MINKLOC3D_RESULT_FOLDER = 'results/pr_evaluation_minkloc3d'
 # EPNNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_atten_epn_netvlad'
 # E2PNNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_e2pn_netvlad'
