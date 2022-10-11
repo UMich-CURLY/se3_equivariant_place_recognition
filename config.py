@@ -98,10 +98,16 @@ EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_query.pic
 # EVAL_DATABASE_FILE = '/home/cel/data/benchmark_datasets/residential_evaluation_database.pickle'
 # EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/residential_evaluation_query.pickle'
 
+# KITTI
+# EVAL_DATABASE_FILE = '/home/cel/data/kitti/kitti_00_database_evaluate_new.pickle'
+# EVAL_QUERY_FILE = '/home/cel/data/kitti/kitti_00_queries_evaluate_new.pickle'
+# EVAL_DATABASE_FILE = '/home/cel/data/kitti/kitti_08_database_evaluate_new.pickle'
+# EVAL_QUERY_FILE = '/home/cel/data/kitti/kitti_08_queries_evaluate_new.pickle'
+
 '''BASELINES TO PLOT (OPTIONAL)'''
 POINTNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_pointnetvlad'
-SCANCONTEXT_RESULT_FOLDER = 'results/pr_evaluation_scan_context_oxford_evalall'
-M2DP_RESULT_FOLDER = 'results/pr_evaluation_m2dp_evalall'
+SCANCONTEXT_RESULT_FOLDER = 'results/pr_evaluation_scan_context'
+M2DP_RESULT_FOLDER = 'results/pr_evaluation_m2dp'
 MINKLOC3D_RESULT_FOLDER = 'results/pr_evaluation_minkloc3d'
 
 '''cofig to string'''
