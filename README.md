@@ -6,7 +6,7 @@ This paper reports on a new 3D point cloud-based place recognition framework tha
 ![](media/se3_equivariant_place_recognition.png)
 
 ## Different Branches
-In the paper, we tested both [EPN](https://github.com/nintendops/EPN_PointCloud) and [E2PN](https://github.com/minghanz/EPN_PointCloud) as encoder for learning equivariant features from point clouds. The modules for two encoders are slightly different, to avoid conficts, we separte them into two branches. The master branch contains code for testing EPN, and the e2pn brach contains code for testing E2PN.
+In the paper, we tested both [EPN](https://github.com/nintendops/EPN_PointCloud) and [E2PN](https://github.com/minghanz/EPN_PointCloud) as encoder for learning equivariant features from point clouds. The modules for two encoders are slightly different. To avoid conficts, we separte them into two branches. The master branch contains code for testing EPN, and the e2pn brach contains code for testing E2PN.
 
 For EPN:
 ```
