@@ -4,26 +4,25 @@
 ''' DATA LOADER '''
 # number of points for the input clouds
 NUM_POINTS = 4096
-# data path
+# data path, '/home/cel/data/benchmark_datasets' for oxford or '/home/cel/data/kitti' for kitti
 DATASET_FOLDER = '/home/cel/data/benchmark_datasets'
-# DATASET_FOLDER = '/home/cel/data/kitti'
 
 #####################
 # TRAINING SETTINGS #
 #####################
 ''' GLOBAL '''
 # specify the experient name, training process will be saved in the folder with the same name
-EXP_NAME = 'e2pn_gem_exact_trainall' 
+EXP_NAME = 'test' 
 # choose the model to be trained from 'epn_netvlad' or 'atten_epn_netvlad'
-MODEL = 'e2pn_gem' # 'e2pn_gem' # 'e2pn_netvlad'
+MODEL = 'e2pn_gem'
 
 ''' TRAINING PICKLE FILES '''
 # use the picke files in the following two lines for whole benchmark training
-TRAIN_FILE = '/home/cel/data/benchmark_datasets/training_queries_baseline.pickle'
-TEST_FILE = '/home/cel/data/benchmark_datasets/test_queries_baseline.pickle'
+TRAIN_FILE = '/home/cel/data/benchmark_datasets/oxford_training_queries_baseline.pickle'
+TEST_FILE = '/home/cel/data/benchmark_datasets/oxford_test_queries_baseline.pickle'
 # use the picke files in the following two lines for a quick training with only 3 sequences in the benchmark
-# TRAIN_FILE = '/home/cel/data/benchmark_datasets/training_queries_baseline_seq567.pickle'
-# TEST_FILE = '/home/cel/data/benchmark_datasets/test_queries_baseline_seq567.pickle'
+# TRAIN_FILE = '/home/cel/data/benchmark_datasets/oxford_training_queries_3seq.pickle'
+# TEST_FILE = '/home/cel/data/benchmark_datasets/oxford_test_queries_3seq.pickle'
 
 ''' NETWORK DIMENSIONS '''
 # output dimension of the global descriptor
@@ -75,12 +74,10 @@ GPU = '0'
 # choose the model to evaluate from 'epn_netvlad' or 'atten_epn_netvlad'
 EVAL_MODEL = 'e2pn_gem' # 'e2pn_gem' # 'e2pn_netvlad'
 # the pretrained weights that you want to load into the model
-RESUME_FILENAME = 'pretrained_model/e2pn_gem_exact_trainall.ckpt'
-# RESUME_FILENAME = 'pretrained_model/e2pn_netvlad_32_64_trainall.ckpt'
-# RESUME_FILENAME = LOG_DIR+EXP_NAME+'/'+MODEL_FILENAME
+# RESUME_FILENAME = 'pretrained_model/test.ckpt'
+RESUME_FILENAME = LOG_DIR+EXP_NAME+'/'+MODEL_FILENAME
 # save paths for the evaluation results
-# RESULTS_FOLDER = 'results/pr_evaluation_e2pn_netvlad_32_64_128_3seq'
-RESULTS_FOLDER = 'results/pr_evaluation_e2pn_gem_exact_trainall_evalrot'
+RESULTS_FOLDER = 'results/pr_evaluation_e2pn_gem_eval'
 OUTPUT_FILE = RESULTS_FOLDER+'/results.txt'
 
 ''' DATA LOADER '''
@@ -109,17 +106,13 @@ EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_query.pic
 # EVAL_DATABASE_FILE = '/home/cel/data/kitti/kitti_08_database_evaluate_new.pickle'
 # EVAL_QUERY_FILE = '/home/cel/data/kitti/kitti_08_queries_evaluate_new.pickle'
 
-# rotation only
-EVAL_DATABASE_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_database_rot.pickle'
-EVAL_QUERY_FILE = '/home/cel/data/benchmark_datasets/oxford_evaluation_query_rot.pickle'
-
 '''BASELINES TO PLOT (OPTIONAL)'''
 POINTNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_pointnetvlad'
 SCANCONTEXT_RESULT_FOLDER = 'results/pr_evaluation_scan_context_oxford_evalall'
 M2DP_RESULT_FOLDER = 'results/pr_evaluation_m2dp_evalall'
 MINKLOC3D_RESULT_FOLDER = 'results/pr_evaluation_minkloc3d'
-EPNNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_atten_epn_netvlad_na60_trainall'
-E2PNNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_e2pn_netvlad_exact_trainall_eval'
+# EPNNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_atten_epn_netvlad'
+# E2PNNETVLAD_RESULT_FOLDER = 'results/pr_evaluation_e2pn_netvlad'
 
 
 '''cofig to string'''
