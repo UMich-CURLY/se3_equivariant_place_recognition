@@ -53,7 +53,7 @@ def evaluate():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     opt_oxford.device = device
 
-    # try different number of anchor
+    # number of rotation anchors. 60 for EPN, 12 for E2PN
     opt_oxford.model.kanchor = 60
 
     # build model

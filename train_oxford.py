@@ -1,5 +1,5 @@
 """
-Main file for training EPN-NetVLAD on Oxford benchmark
+Main file for training EPN-NetVLAD, Atten-EPN-NetVLAD, and EPN-GeM on Oxford benchmark
 Adapted from https://github.com/cattaneod/PointNetVlad-Pytorch/blob/master/train_pointnetvlad.py
 """
 import numpy as np
@@ -24,7 +24,7 @@ import wandb
 
 
 '''PARAMETERS'''
-# try smaller number of anchors
+# number of rotation anchors. 60 for EPN, 12 for E2PN
 opt_oxford.model.kanchor = 60
 
 # global parameters
