@@ -1,5 +1,15 @@
 # SE(3)-Equivariant Point Cloud-based Place Recognition
-This repository contains the code for **SE(3)-Equivariant Point Cloud-based Place Recognition**.
+This repository contains the code for [**SE(3)-Equivariant Point Cloud-based Place Recognition**](https://openreview.net/forum?id=gUtbYFHluAg).
+
+```
+@inproceedings{lin2022seequivariant,
+title={{SE}(3)-Equivariant Point Cloud-Based Place Recognition},
+author={Chien Erh Lin and Jingwei Song and Ray Zhang and Minghan Zhu and Maani Ghaffari},
+booktitle={6th Annual Conference on Robot Learning},
+year={2022},
+url={https://openreview.net/forum?id=gUtbYFHluAg}
+}
+```
 
 ## Abstract
 This paper reports on a new 3D point cloud-based place recognition framework that uses SE(3)-equivariant networks to learn SE(3)-invariant global descriptors. We discover that, unlike existing methods, learned SE(3)-invariant global descriptors are more robust to matching inaccuracy and failure in severe rotation and translation configurations. Mobile robots undergo arbitrary rotational and translational movements. The SE(3)-invariant property ensures the learned descriptors are robust to the rotation and translation changes in the robot pose and can represent the intrinsic geometric information of the scene. Furthermore, we have discovered that the attention module aids in the enhancement of performance while allowing significant downsampling. We evaluate the performance of the proposed framework on real-world data sets. The experimental results show that the proposed framework outperforms state-of-the-art baselines in various metrics, leading to a reliable point cloud-based place recognition network.
