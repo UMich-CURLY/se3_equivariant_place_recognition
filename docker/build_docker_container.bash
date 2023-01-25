@@ -16,4 +16,4 @@ docker run -it --net=host --shm-size 8G --gpus all  \
   --device=/dev/dri:/dev/dri \
   --name=${container_name} \
   --security-opt seccomp=unconfined \
-  epnnetvlad/epnnetvlad_docker:latest
+  umcurly/equivariantpr_docker:latest
