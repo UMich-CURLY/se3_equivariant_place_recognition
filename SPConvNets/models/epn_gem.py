@@ -19,9 +19,8 @@ class EPNGeM(nn.Module):
         self.mlps=[[64]]
         out_mlps=[self.mlps[-1][0], cfg.LOCAL_FEATURE_DIM]
         self.epn = frontend.build_model(self.opt, self.mlps, out_mlps, outblock='linear')
-        # print('EPN', self.epn)
         
-        # netvlad
+        # GeM
         self.gem = M.GeM()
 
     def forward(self, x):
