@@ -30,7 +30,7 @@ git checkout e2pn
 ## Environment Set Up
 The code has been tested on a Ubuntu 20.04 machine equipped with Intel i9-10900K CPU with a 3.7 GHz processor and an Nvidia GeForce RTX 3090. 
 The code has been tested with python 3.8.12 and pytorch 1.11.0.
-See [docker](docker) folder for how to use docker image and build docker container.
+See [docker](docker) folder for how to use docker image and build docker container. If you are insterested in building the environment, the dependencies are listed in the [DockerFile](https://github.com/UMich-CURLY/se3_equivariant_place_recognition/blob/master/docker/Dockerfile).
 In addition to docker, The module and additional dependencies can be installed with
 ```
 cd vgtk
