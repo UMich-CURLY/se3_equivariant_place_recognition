@@ -125,11 +125,11 @@ def build_model(opt,
                 inter_stride = 1
                 nidx = i+1
 
-            print(f"At block {i}, layer {j}!")
-            print(f'neighbor: {neighbor}')
-            print(f'stride: {inter_stride}')
-            print(f'radius : {radii[nidx]}')
-            print(f'sigma : {weighted_sigma[nidx]}')
+            # print(f"At block {i}, layer {j}!")
+            # print(f'neighbor: {neighbor}')
+            # print(f'stride: {inter_stride}')
+            # print(f'radius : {radii[nidx]}')
+            # print(f'sigma : {weighted_sigma[nidx]}')
 
             # one-inter one-intra policy
             if na == 60:
