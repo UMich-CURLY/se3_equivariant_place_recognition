@@ -400,7 +400,7 @@ def icosahedron_trimesh_to_vertices(mesh_path):
 def get_relativeV_index(Rs, vs):
     # the permutation of the 12 vertices under the 60 rotations
     # Rs: 60*3*3, vs: 12*3
-    print("Rs.shape", Rs.shape, vs.shape)
+    # print("Rs.shape", Rs.shape, vs.shape)
     incr_r = np.einsum('dij,aj->dai', Rs, vs) # drotation*anchor, 60*12*3
     incr_r = incr_r[:,:,None]   # 60*12*1*3
     ori_vs = vs[None,None]      # 1*1*12*3
